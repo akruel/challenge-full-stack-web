@@ -1,14 +1,12 @@
 const { Student } = require('../models');
-const { Op } = require('sequelize');
+const { Op, where, fn, col } = require('sequelize');
 
 class StudentsController {
   static async findAll(req, res, next) {
     const students = await Student.findAndCountAll({
-      where: {
-        name: {
-          [Op.iLike]: `%${req.query.searchByName}%`,
-        },
-      },
+      where: where(fn('lower', col('name')), {
+        [Op.like]: `%${req.query.searchByName}%`,
+      }),
       offset: req.query.offset,
       limit: req.query.limit,
     });
