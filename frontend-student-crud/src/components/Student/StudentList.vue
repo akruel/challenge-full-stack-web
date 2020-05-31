@@ -1,10 +1,16 @@
 <template>
   <v-container>
     <h1>{{ name }}</h1>
+    <v-text-field
+      v-model="searchName"
+      label="PESQUISAR POR NOME"
+      @input="read(1, searchName)"
+    ></v-text-field>
     <v-data-table
       v-model="selected"
       :headers="headers"
       :items="students"
+      :items-per-page="5"
       :single-select="singleSelect"
       item-key="id"
       class="elevation-1"
@@ -21,6 +27,14 @@
         </v-icon>
       </template>
     </v-data-table>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="paginationLength"
+        circle
+        @input="read(page)"
+      ></v-pagination>
+    </div>
   </v-container>
 </template>
 
@@ -33,10 +47,17 @@ export default {
   },
 
   methods: {
-    read() {
+    read(page = 1, searchName = '') {
+      console.log(this.searchName);
       this.loading = true;
-      service.getStudents().then((students) => {
-        this.students = students.data;
+      service.getStudents(searchName, page).then((students) => {
+        this.students = students.data.rows;
+        console.log(this.students);
+        this.paginationLength = students.data.count / this.studentsLimit;
+        if (!Number.isInteger(this.paginationLength)) {
+          this.paginationLength =
+            Number.parseInt(this.paginationLength.toPrecision(1)) + 1;
+        }
         this.loading = false;
       });
     },
@@ -52,9 +73,13 @@ export default {
 
   data: () => ({
     name: 'Lista de Alunos',
+    searchName: null,
     singleSelect: false,
     selected: [],
     loading: null,
+    page: 1,
+    studentsLimit: 5,
+    paginationLength: null,
     headers: [
       { text: 'RA', value: 'id' },
       { text: 'NOME', value: 'name' },
@@ -68,3 +93,8 @@ export default {
   }),
 };
 </script>
+<style>
+.text-center {
+  margin-top: 2em;
+}
+</style>

@@ -1,8 +1,17 @@
 const { Student } = require('../models');
+const { Op } = require('sequelize');
 
 class StudentsController {
   static async findAll(req, res, next) {
-    const students = await Student.findAll();
+    const students = await Student.findAndCountAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${req.query.searchByName}%`,
+        },
+      },
+      offset: req.query.offset,
+      limit: req.query.limit,
+    });
     res.status(200).send(students);
   }
 
