@@ -28,12 +28,15 @@ export default {
     return students;
   },
   saveStudent(student) {
-    if (student.id) {
-      return axios.put(`${API_STUDENTS_URL}/${student.id}`);
-    } else {
-      delete student.id;
-      return axios.post(API_STUDENTS_URL, student);
-    }
+    return axios.post(API_STUDENTS_URL, student);
+  },
+  updateStudent(student, id) {
+    const studentToUp = {
+      name: student.name,
+      email: student.email,
+      cpf: student.cpf,
+    };
+    return axios.put(`${API_STUDENTS_URL}/${id}`, studentToUp);
   },
   deleteStudent(id) {
     return axios.delete(`${API_STUDENTS_URL}/${id}`);
