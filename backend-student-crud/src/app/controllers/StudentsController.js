@@ -15,23 +15,21 @@ class StudentsController {
   }
 
   static async read(req, res, next) {
-    const students = await Student.findAndCountAll({
-      where: where(fn('lower', col('name')), {
-        [Op.like]: `%${req.query.searchByName}%`,
-      }),
-      offset: req.query.offset,
-      limit: req.query.limit,
-    });
-    res.status(200).send(students);
-  }
-
-  static async getOne(req, res, next) {
-    const student = await Student.findByPk(req.params.id);
-
-    if (!student)
-      return res.status(404).json({ message: 'Student does not exit.' });
-
-    res.status(200).send(student);
+    try {
+      const students = await Student.findAndCountAll({
+        where: where(fn('lower', col('name')), {
+          [Op.like]: `%${req.query.searchByName}%`,
+        }),
+        offset: req.query.offset,
+        limit: req.query.limit,
+      });
+      res.status(200).send(students);
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: 'An error occurred on the server.' });
+    }
   }
 
   static async update(req, res, next) {
@@ -46,6 +44,40 @@ class StudentsController {
       });
 
       res.status(204).send(upStudent);
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: 'An error occurred on the server.' });
+    }
+  }
+
+  static async delete(req, res, next) {
+    try {
+      const student = await Student.findByPk(req.params.id);
+
+      if (!student)
+        return res.status(404).json({ message: 'Student does not exit.' });
+
+      const destroyed = await student.destroy();
+
+      res.status(204).send(destroyed);
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: 'An error occurred on the server.' });
+    }
+  }
+
+  static async getOne(req, res, next) {
+    try {
+      const student = await Student.findByPk(req.params.id);
+
+      if (!student)
+        return res.status(404).json({ message: 'Student does not exit.' });
+
+      res.status(200).send(student);
     } catch (error) {
       console.error(error);
       return res

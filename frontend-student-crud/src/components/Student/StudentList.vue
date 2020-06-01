@@ -2,6 +2,7 @@
   <v-container>
     <h1>{{ name }}</h1>
     <v-text-field
+      v-show="paginationLength > 0"
       v-model="searchName"
       label="PESQUISAR POR NOME"
       @input="read(1, searchName)"
@@ -50,11 +51,9 @@ export default {
 
   methods: {
     read(page = 1, searchName = '') {
-      console.log(this.searchName);
       this.loading = true;
       service.getStudents(searchName, page).then((students) => {
         this.students = students.data.rows;
-        console.log(this.students);
         this.paginationLength = students.data.count / this.studentsLimit;
         if (!Number.isInteger(this.paginationLength)) {
           this.paginationLength =
@@ -64,12 +63,14 @@ export default {
       });
     },
     editItem(student) {
-      console.log(student);
       this.$router.push({ path: `/estudante/${student.id}` });
     },
     deleteItem(student) {
       console.log(student);
-      alert('Em breve!');
+      this.loading = true;
+      service.deleteStudent(student.id).then(() => {
+        this.read();
+      });
     },
   },
 
