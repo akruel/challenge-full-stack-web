@@ -29,6 +29,15 @@ class StudentsSchema extends RouteValidator {
     };
     return this.validate(schema);
   }
+
+  // static get delete() {
+  //   const schema = {
+  //     params: Joi.object().keys({
+  //       id: Joi.objectId().required(),
+  //     }),
+  //   };
+  //   return this.validate(schema);
+  // }
 }
 
 module.exports = StudentsSchema;

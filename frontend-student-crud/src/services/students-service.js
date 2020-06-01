@@ -35,4 +35,7 @@ export default {
       return axios.post(API_STUDENTS_URL, student);
     }
   },
+  deleteStudent(id) {
+    return axios.delete(`${API_STUDENTS_URL}/${id}`);
+  },
 };
