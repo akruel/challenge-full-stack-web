@@ -12,7 +12,6 @@ const db = require('./app/models');
 class Server {
   constructor() {
     this.express = express();
-    this.isDev = process.env.NODE_ENV === 'development';
     this.isTest = process.env.NODE_ENV === 'test';
 
     this.middlewares();

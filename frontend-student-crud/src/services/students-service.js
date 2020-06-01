@@ -20,7 +20,19 @@ export default {
 
     return students;
   },
+  getStudentById(id) {
+    const students = axios
+      .get(`${API_STUDENTS_URL}/${id}`)
+      .then((response) => response);
+
+    return students;
+  },
   saveStudent(student) {
-    return axios.post(API_STUDENTS_URL, student);
+    if (student.id) {
+      return axios.put(`${API_STUDENTS_URL}/${student.id}`);
+    } else {
+      delete student.id;
+      return axios.post(API_STUDENTS_URL, student);
+    }
   },
 };

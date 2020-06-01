@@ -35,7 +35,7 @@
     </v-app-bar>
 
     <v-content>
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </v-content>
     <v-footer color="black" app>
       <span class="white--text">&copy; 2020</span>

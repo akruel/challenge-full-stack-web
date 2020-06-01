@@ -1,6 +1,14 @@
 <template>
   <v-container>
-    <h1>{{ title }}</h1>
+    <div>
+      <h1>{{ title }}</h1>
+      <v-progress-circular
+        :size="30"
+        v-show="showGetProgress"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
+    </div>
 
     <ValidationObserver ref="studentObserver" v-slot="{ handleSubmit, reset }">
       <v-form
@@ -8,7 +16,12 @@
         @submit.prevent="handleSubmit(submit)"
         @reset.prevent="reset"
       >
-        <!-- <v-text-field v-model="ra" label="RA"></v-text-field> -->
+        <v-text-field
+          v-model="student.id"
+          label="RA"
+          disabled
+          v-show="student.id"
+        ></v-text-field>
         <ValidationProvider v-slot="{ errors }" name="Nome" rules="required">
           <v-text-field
             v-model="student.name"
@@ -38,7 +51,9 @@
           ></v-text-field>
         </ValidationProvider>
         <div class="buttonsForm">
-          <v-btn color="primary" type="submit" class="mr-4">Cadastrar</v-btn>
+          <v-btn color="primary" type="submit" class="mr-4">{{
+            submitBtnText
+          }}</v-btn>
           <v-btn @click="clear" class="mr-4">Limpar</v-btn>
           <v-progress-circular
             :size="30"
@@ -50,7 +65,7 @@
       </v-form>
     </ValidationObserver>
     <v-alert type="success" v-show="showSuccessAlert">
-      Cadastrado com sucesso!
+      {{ successMessage }}
     </v-alert>
   </v-container>
 </template>
@@ -88,12 +103,27 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-  mounted() {},
+  mounted() {
+    if (this.$route.params.id) {
+      this.onEdit(this.$route.params.id);
+      this.title = 'Atualizar Aluno';
+      this.successMessage = 'Atualizado com sucesso!';
+      this.submitBtnText = 'Atualizar';
+    } else {
+      this.title = 'Cadastro de Alunos';
+      this.successMessage = 'Cadastrado com sucesso!';
+      this.submitBtnText = 'Cadastrar';
+    }
+  },
   data: () => ({
-    title: 'Cadastro de Alunos',
+    title: '',
     showSuccessAlert: false,
     showProgress: false,
+    showGetProgress: false,
+    successMessage: null,
+    submitBtnText: '',
     student: {
+      id: null,
       name: '',
       cpf: '',
       email: '',
@@ -102,14 +132,21 @@ export default {
   methods: {
     submit() {
       this.showProgress = true;
-      service.saveStudent(this.student).then((student) => {
-        console.log('Aluno salvo: ', student);
+      service.saveStudent(this.student).then(() => {
         this.showSuccessAlert = true;
         this.showProgress = false;
         this.clear();
         setTimeout(() => {
           this.showSuccessAlert = false;
         }, 2000);
+      });
+    },
+
+    onEdit(id) {
+      this.showGetProgress = true;
+      service.getStudentById(id).then((student) => {
+        this.student = student.data;
+        this.showGetProgress = false;
       });
     },
 
