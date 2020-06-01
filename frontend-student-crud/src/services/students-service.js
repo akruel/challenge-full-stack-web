@@ -28,7 +28,12 @@ export default {
     return students;
   },
   saveStudent(student) {
-    return axios.post(API_STUDENTS_URL, student);
+    const studentToSave = {
+      name: student.name,
+      email: student.email,
+      cpf: student.cpf,
+    };
+    return axios.post(API_STUDENTS_URL, studentToSave);
   },
   updateStudent(student, id) {
     const studentToUp = {
