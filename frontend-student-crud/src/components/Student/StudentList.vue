@@ -24,7 +24,7 @@
         <v-icon small class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteItem(item)">
+        <v-icon small @click="openConfirmDelete(item)">
           mdi-delete
         </v-icon>
       </template>
@@ -38,6 +38,25 @@
         @input="read(page)"
       ></v-pagination>
     </div>
+    <v-dialog v-model="dialog" persistent max-width="490">
+      <v-card>
+        <v-card-title class="headline"
+          >Atenção:</v-card-title
+        >
+        <v-card-text class="headline"
+          >Deseja realmente excluir este aluno?</v-card-text
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog = false"
+            >Cancelar</v-btn
+          >
+          <v-btn color="green darken-1" text @click="deleteItem()"
+            >Confirmar</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -65,12 +84,16 @@ export default {
     editItem(student) {
       this.$router.push({ path: `/estudante/${student.id}` });
     },
-    deleteItem(student) {
-      console.log(student);
+    deleteItem() {
+      this.dialog = false;
       this.loading = true;
-      service.deleteStudent(student.id).then(() => {
+      service.deleteStudent(this.idToDelete).then(() => {
         this.read();
       });
+    },
+    openConfirmDelete(student) {
+      this.dialog = true;
+      this.idToDelete = student.id;
     },
   },
 
@@ -83,6 +106,8 @@ export default {
     page: 1,
     studentsLimit: 5,
     paginationLength: null,
+    dialog: false,
+    idToDelete: null,
     headers: [
       { text: 'RA', value: 'id' },
       { text: 'NOME', value: 'name' },

@@ -37,7 +37,7 @@ class StudentsController {
       const student = await Student.findByPk(req.params.id);
 
       if (!student)
-        return res.status(404).json({ message: 'Student does not exit.' });
+        return res.status(404).json({ message: 'Student does not exist.' });
 
       let upStudent = await Student.update(req.body, {
         where: { id: req.params.id },
@@ -57,7 +57,7 @@ class StudentsController {
       const student = await Student.findByPk(req.params.id);
 
       if (!student)
-        return res.status(404).json({ message: 'Student does not exit.' });
+        return res.status(404).json({ message: 'Student does not exist.' });
 
       const destroyed = await student.destroy();
 
@@ -75,7 +75,7 @@ class StudentsController {
       const student = await Student.findByPk(req.params.id);
 
       if (!student)
-        return res.status(404).json({ message: 'Student does not exit.' });
+        return res.status(404).json({ message: 'Student does not exist.' });
 
       res.status(200).send(student);
     } catch (error) {

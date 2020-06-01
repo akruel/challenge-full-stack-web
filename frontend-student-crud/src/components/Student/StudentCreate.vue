@@ -54,7 +54,12 @@
           <v-btn color="primary" type="submit" class="mr-4">{{
             submitBtnText
           }}</v-btn>
-          <v-btn @click="clear" class="mr-4">Limpar</v-btn>
+          <v-btn v-show="showClearBtn" @click="clear" class="mr-4"
+            >Limpar</v-btn
+          >
+          <v-btn to="/estudante/lista" class="mr-4"
+            >Cancelar</v-btn
+          >
           <v-progress-circular
             :size="30"
             v-show="showProgress"
@@ -106,6 +111,7 @@ export default {
   mounted() {
     if (this.$route.params.id) {
       this.onEdit(this.$route.params.id);
+      this.showClearBtn = false;
       this.title = 'Atualizar Aluno';
       this.successMessage = 'Atualizado com sucesso!';
       this.submitBtnText = 'Atualizar';
@@ -122,6 +128,7 @@ export default {
     showGetProgress: false,
     successMessage: null,
     submitBtnText: '',
+    showClearBtn: true,
     student: {
       id: null,
       name: '',
@@ -132,14 +139,24 @@ export default {
   methods: {
     submit() {
       this.showProgress = true;
-      service.saveStudent(this.student).then(() => {
-        this.showSuccessAlert = true;
-        this.showProgress = false;
-        this.clear();
-        setTimeout(() => {
-          this.showSuccessAlert = false;
-        }, 2000);
-      });
+      if (!this.student.id) {
+        service.saveStudent(this.student).then(() => {
+          this.clear();
+          this.showSuccessAlert = true;
+          this.showProgress = false;
+          setTimeout(() => {
+            this.showSuccessAlert = false;
+          }, 1500);
+        });
+      } else {
+        service.updateStudent(this.student, this.student.id).then(() => {
+          this.showSuccessAlert = true;
+          this.showProgress = false;
+          setTimeout(() => {
+            this.showSuccessAlert = false;
+          }, 1500);
+        });
+      }
     },
 
     onEdit(id) {

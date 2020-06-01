@@ -40,13 +40,51 @@
               "type": "object"
             },
             "examples": {
-              "application/json": "{ success: true, id: 1 }"
+              "application/json": "{\n id: number, \n name: string, \n email: string, \n cpf: string \n}"
             }
           },
           "500": {
             "description": "Erro interno",
             "examples": {
               "application/json": "{ success: false, message: 'Falha ao cadastrar estudante.' }"
+            }
+          }
+        }
+      }
+    },
+    "/students/id": {
+      "get": {
+        "summary": "Método para buscar um estudante por ID.",
+        "tags": ["/students"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "param",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            },
+            "examples": {
+              "application/json": "{\n id: number, \n name: string, \n email: string, \n cpf: string \n}"
+            }
+          },
+          "404": {
+            "description": "Não encontrado",
+            "examples": {
+              "application/json": "{ message: 'Student does not exist.' }"
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "examples": {
+              "application/json": "{ message: 'An error occurred on the server.' }"
             }
           }
         }
