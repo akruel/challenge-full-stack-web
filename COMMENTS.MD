@@ -41,5 +41,5 @@ Não sei se era requisito, mas não realizei test's no frontend.
 Também realizei o deploy da aplicação (front e back) na plataforma Heroku (utilizando também o Postgres oferecido pela plataforma). Gosto de enxergar a aplicação em um servidor para realizar outros testes que não tão "cegos" como o do ambiente local/desenv. Sem falar que sou bastante interessado em DevOps, então qualquer oportunidade de brincar um pouco com isso, estou lá.
 
 ## Link's:
-https://backend-student-crud.herokuapp.com/docs/
-https://frontend-student-crud.herokuapp.com/
+- https://backend-student-crud.herokuapp.com/docs/
+- https://frontend-student-crud.herokuapp.com/
