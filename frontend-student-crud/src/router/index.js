@@ -22,6 +22,11 @@ const routes = [
     name: 'StudentList',
     component: StudentList,
   },
+  {
+    path: '/estudante/:id',
+    name: 'StudentCreate',
+    component: StudentCreate,
+  },
 ];
 
 const router = new VueRouter({

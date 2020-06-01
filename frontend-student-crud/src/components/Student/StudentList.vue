@@ -16,6 +16,7 @@
       class="elevation-1"
       hide-default-footer
       :loading="loading"
+      no-data-text="Não há alunos cadastrados."
       loading-text="Carregando..."
     >
       <template v-slot:item.actions="{ item }">
@@ -30,6 +31,7 @@
     <div class="text-center">
       <v-pagination
         v-model="page"
+        v-show="paginationLength > 0"
         :length="paginationLength"
         circle
         @input="read(page)"
@@ -63,7 +65,7 @@ export default {
     },
     editItem(student) {
       console.log(student);
-      alert('Em breve!');
+      this.$router.push({ path: `/estudante/${student.id}` });
     },
     deleteItem(student) {
       console.log(student);
