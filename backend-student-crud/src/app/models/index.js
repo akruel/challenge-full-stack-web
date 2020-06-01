@@ -7,7 +7,7 @@ const config = require('../../config/database');
 
 const db = {};
 const sequelize =
-  process.env.NODE_ENV === 'test'
+  (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'dev')
     ? new Sequelize({
         dialect: 'sqlite',
         storage: './database.sqlite',
